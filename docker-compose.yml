@@ -1,0 +1,16 @@
+version: '3.9'
+name: nestjs-fundamentals
+
+services:
+  db:
+    image: postgres:15.3
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+
+volumes:
+  postgres_data:
