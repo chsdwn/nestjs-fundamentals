@@ -9,22 +9,33 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 
+import { Protocol, Public } from 'src/common/decorators';
+import { ParseIntPipe } from 'src/common/pipes';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto, PaginationQueryDto, UpdateCoffeeDto } from './dto';
 
+@UsePipes(ValidationPipe)
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
+  @UsePipes(ValidationPipe)
+  @Public()
   @Get()
-  findAll(@Query() paginationQueryDto: PaginationQueryDto) {
+  findAll(
+    @Protocol('https') protocol: string,
+    @Query() paginationQueryDto: PaginationQueryDto,
+  ) {
+    console.log('[CoffeesController:findAll]: protocol', protocol);
     return this.coffeesService.findAll(paginationQueryDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.coffeesService.findOne(id);
   }
 
@@ -35,7 +46,10 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(
+    @Param('id') id: number,
+    @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeesService.update(id, updateCoffeeDto);
   }
 
