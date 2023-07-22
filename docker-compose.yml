@@ -1,0 +1,11 @@
+version: '3.9'
+name: 'nestjs-fundamentals-mongodb'
+
+services:
+  db:
+    image: mongo:6.0.8
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: nestjs-fundamentals

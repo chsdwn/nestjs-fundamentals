@@ -1,1 +1,1 @@
-export { Coffee } from './coffee.entity';
+export { Coffee, CoffeeSchema } from './coffee.entity';
