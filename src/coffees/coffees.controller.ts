@@ -9,21 +9,21 @@ import {
   Patch,
   Post,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Protocol, Public } from 'src/common/decorators';
 import { ParseIntPipe } from 'src/common/pipes';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto, PaginationQueryDto, UpdateCoffeeDto } from './dto';
 
-@UsePipes(ValidationPipe)
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}
 
-  @UsePipes(ValidationPipe)
+  // @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiForbiddenResponse({ description: 'Forbidden.' })
   @Public()
   @Get()
   findAll(
@@ -46,10 +46,7 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
-  ) {
+  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(id, updateCoffeeDto);
   }
 
